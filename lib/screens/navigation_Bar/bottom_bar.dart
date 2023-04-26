@@ -22,7 +22,7 @@ class _BottomAppBarScreenState extends State<BottomAppBarScreen> {
     Icon(Icons.person),
   ];
 
-  int index = 1;
+  int index = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(

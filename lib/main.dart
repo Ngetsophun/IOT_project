@@ -5,7 +5,6 @@ import 'package:iot_project/screens/login_screen/login.dart';
 import 'package:iot_project/screens/navigation_Bar/bottom_bar.dart';
 import 'package:iot_project/screens/navigation_Bar/home.dart';
 
-
 void main() {
   runApp(const MyApp());
 }

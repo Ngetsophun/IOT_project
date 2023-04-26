@@ -3,6 +3,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:iot_project/modelData/dashboardModel.dart';
 import 'package:iot_project/screens/Home/home_widget/addNew_Dashboard.dart';
+import 'package:iot_project/screens/Home/newRoom/showDeviceRoom.dart';
 import 'package:iot_project/screens/navigation_Bar/account.dart';
 import 'package:iot_project/screens/navigation_Bar/recent.dart';
 import 'package:iot_project/screens/navigation_Bar/search.dart';
@@ -16,8 +17,6 @@ class DashBoardScreen extends StatefulWidget {
 
 class _DashBoardScreenState extends State<DashBoardScreen> {
   bool onchange = false;
-
- 
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +32,6 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
       //   // backgroundColor: Colors.transparent,
       // ),
       body: Container(
-        
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         decoration: const BoxDecoration(
@@ -94,7 +92,10 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                     DashBoard dashBoard = dashboardDatalist[index];
                     return GestureDetector(
                       onTap: () {
-                        print(dashBoard.name);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ShowDeviceRoom()));
                       },
                       child: Card(
                         elevation: 3,
@@ -156,5 +157,4 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
       ),
     );
   }
-  
 }

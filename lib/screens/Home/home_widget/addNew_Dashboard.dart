@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:iot_project/widgets/custom_AddNewDevice.dart';
 
 class AddNewDashBoard extends StatefulWidget {
   const AddNewDashBoard({super.key});
@@ -10,8 +11,17 @@ class AddNewDashBoard extends StatefulWidget {
 }
 
 class _AddNewDashBoardState extends State<AddNewDashBoard> {
+  File? file;
+  final ImagePicker Images = ImagePicker();
+
+  List<File> _images = [];
+  final picker = ImagePicker();
+
   late PickedFile _imgFile;
   final ImagePicker _picker = ImagePicker();
+
+  late String chooseBoard = '0 = OFF';
+  List ItemBoard = ['0 = OFF', '1 = ON'];
 
   @override
   Widget build(BuildContext context) {
@@ -42,11 +52,82 @@ class _AddNewDashBoardState extends State<AddNewDashBoard> {
               SizedBox(
                 height: 10,
               ),
-              deviceRoom(),
+              // deviceRoom(),
               SizedBox(
                 height: 10,
               ),
-              buttomSave(),
+              Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    ButtonAddNewDevice(),
+                    buttomSave(),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Expanded(
+                child: ListView.builder(
+                    itemCount: 10,
+                    itemBuilder: (context, index) {
+                      return Card(
+                        elevation: 2,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Container(
+                          height: 70,
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Name Device',
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    'Board',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                children: [
+                                  Text('GPIO: '),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Icon(Icons.edit),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      Icon(Icons.delete),
+                                    ],
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                      );
+                    
+                    }),
+              )
             ],
           ),
         ),
@@ -57,22 +138,32 @@ class _AddNewDashBoardState extends State<AddNewDashBoard> {
   Widget imageRoom() {
     return Center(
       child: Stack(
-        children: [
-          CircleAvatar(
-            radius: 80.0,
-            backgroundColor: Colors.white60,
-            // backgroundImage: _imgFile != null?null
-            //     : FileImage(File(_imgFile.path)),
-           
-           
-          ),
+        children: <Widget>[
+          // CircleAvatar(
+          //   radius: 80.0,
+          //   backgroundColor: Colors.white60,
+          //    backgroundImage: _imgFile == null? Icon(Icons.image):FileImage(File(_imgFile.path)),
+          // ),
+          Container(
+              height: 150,
+              width: 150,
+              child: ClipOval(
+                child: file == null
+                    ? const Icon(Icons.image)
+                    : Image.file(
+                        file!,
+                        fit: BoxFit.cover,
+                      ),
+                // _imgFile == null? const Icon(Icons.image):FileImage(File(_imgFile.path)),
+              )),
           Positioned(
               bottom: 20.0,
               right: 20.0,
               child: InkWell(
                 onTap: () {
-                  showModalBottomSheet(
-                      context: context, builder: ((build) => bottomsheet()));
+                  // showModalBottomSheet(
+                  //     context: context, builder: ((build) => bottomsheet()));
+                  getgallery();
                 },
                 child: Icon(
                   Icons.camera_alt,
@@ -98,26 +189,30 @@ class _AddNewDashBoardState extends State<AddNewDashBoard> {
     );
   }
 
-  Widget deviceRoom() {
-    return TextFormField(
-      decoration: InputDecoration(
-        border: OutlineInputBorder(),
-        labelText: 'Device Room',
-        prefixIcon: Icon(
-          Icons.room_preferences,
-          color: Colors.black,
-        ),
+  Widget buttomSave() {
+    return Container(
+      height: 50,
+      width: 150,
+      child: ElevatedButton(
+        onPressed: () {},
+        child: Text('Save', style: TextStyle(fontSize: 16)),
       ),
     );
   }
 
-  Widget buttomSave() {
+  Widget ButtonAddNewDevice() {
     return Container(
       height: 50,
-      width: 100,
+      width: 150,
       child: ElevatedButton(
-        onPressed: () {},
-        child: Text('Save'),
+        onPressed: () {
+          showModalBottomSheet(
+              context: context, builder: ((build) => CustomAddnewDevice()));
+        },
+        child: Text(
+          'Add Device',
+          style: TextStyle(fontSize: 16),
+        ),
       ),
     );
   }
@@ -165,5 +260,19 @@ class _AddNewDashBoardState extends State<AddNewDashBoard> {
         ],
       ),
     );
+  }
+
+  getCamera() async {
+    final imgCamera = await Images.getImage(source: ImageSource.camera);
+    setState(() {
+      file = File(imgCamera!.path);
+    });
+  }
+
+  getgallery() async {
+    final imgCamera = await Images.getImage(source: ImageSource.gallery);
+    setState(() {
+      file = File(imgCamera!.path);
+    });
   }
 }
